@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool matchOrMismatch(const string& patient, const string& virus) {
+    if (patient.size() != virus.size()) {
+        return false;
+    }
+    int mismatchCount = 0;
+    for (int i = 0; i < patient.size(); ++i) {
+        if (patient[i] != virus[i]) {
+            mismatchCount++;
+            if (mismatchCount > 1) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void virusIndices(int t, vector<pair<string, string>>& cases) {
+    for (int i = 0; i < t; ++i) {
+        const string& patient = cases[i].first;
+        const string& virus = cases[i].second;
+        int virusLen = virus.size();
+        vector<int> resultIndices;
+        for (int j = 0; j < patient.size() - virusLen + 1; ++j) {
+            if (patient.substr(j, virusLen) == virus) {
+                resultIndices.push_back(j);
+            } else if (matchOrMismatch(patient.substr(j, virusLen), virus)) {
+                resultIndices.push_back(j);
+            }
+        }
+        if (!resultIndices.empty()) {
+            for (int idx : resultIndices) {
+                cout << idx << " ";
+            }
+            cout << endl;
+        } else {
+            cout << "No Match!" << endl;
+        }
+    }
+}
+
+int main() {
+    int t;
+    cin >> t;
+    vector<pair<string, string>> cases(t);
+    for (int i = 0; i < t; ++i) {
+        cin >> cases[i].first >> cases[i].second;
+    }
+
+    virusIndices(t, cases);
+
+    return 0;
+}
